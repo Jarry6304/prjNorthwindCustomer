@@ -28,7 +28,7 @@ namespace prjNorthwindCustomer.Controllers
             try
             {
                 _customersHelper.deleteCustomer(customerID);
-                return NoContent(); 
+                return Ok("已刪除該顧客"); 
             }
             catch (ArgumentException aE)
             {

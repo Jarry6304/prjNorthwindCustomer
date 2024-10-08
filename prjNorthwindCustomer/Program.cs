@@ -25,6 +25,7 @@ builder.Services.AddSwaggerGen(c =>
 
 // 註冊 CustomersDAO 服務
 builder.Services.AddScoped<CustomersDAO>(provider => new CustomersDAO(connectionString));
+builder.Services.AddScoped<OrdersDAO>(provider => new OrdersDAO(connectionString));
 
 // 註冊 CustomersHelper 服務
 builder.Services.AddScoped<ICustomersHelper, CustomersHelper>();

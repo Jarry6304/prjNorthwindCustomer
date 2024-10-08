@@ -16,7 +16,7 @@ namespace prjNorthwindCustomer.DAO
             {
                 string sqlQuery = "SELECT COUNT(*) FROM Orders O JOIN Customers C ON O.CustomerID = C.CustomerID WHERE O.CustomerID = @CustomerID";
                 var count = connection.ExecuteScalar<int>(sqlQuery, new { CustomerID = customerID });
-                if (count < 1)
+                if (count > 0)
                 {
                     return true;
                 }

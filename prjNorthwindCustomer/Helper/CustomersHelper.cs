@@ -52,5 +52,14 @@ namespace prjNorthwindCustomer.Helper
             _customersDAO.updateCustomer(input);
         }
 
+        public void createNewCustomer(Customers input) 
+        {
+            if (_customersDAO.hasCustomer(input.CustomerID))
+            {
+                throw new InvalidOperationException("顧客編號與其他人重複，請重新輸入新顧客編號");
+            }
+            _customersDAO.createNewCustomer(input);
+        }
+
     }
 }

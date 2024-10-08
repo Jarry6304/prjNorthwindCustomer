@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using prjNorthwindCustomer.Models;
 using System;
 using static System.Collections.Specialized.BitVector32;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace prjNorthwindCustomer.DAO
 {
@@ -16,7 +17,6 @@ namespace prjNorthwindCustomer.DAO
 
         internal void createNewCustomer(Customers data)
         {
-
             using (var connection = new SqlConnection(_connectionString))
             {
                 string sqlQuery = @"
@@ -38,6 +38,55 @@ namespace prjNorthwindCustomer.DAO
                 }
                 );
             }
+        }
+
+        internal void updateCustomer(Customers data)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                string sqlQuery = @"
+                    UPDATE Customers SET 
+                        CompanyName = COALESCE(@CompanyName, CompanyName),
+                        ContactName = COALESCE(@ContactName, ContactName),
+                        ContactTitle = COALESCE(@ContactTitle, ContactTitle),
+                        Address = COALESCE(@Address, Address),
+                        City = COALESCE(@City, City),
+                        Region = COALESCE(@Region, Region),
+                        PostalCode = COALESCE(@PostalCode, PostalCode),
+                        Country = COALESCE(@Country, Country),
+                        Phone = COALESCE(@Phone, Phone),
+                        Fax = COALESCE(@Fax, Fax)
+                    WHERE 
+                        CustomerID = @CustomerID";
+                connection.Execute(sqlQuery, new
+                {
+                    CustomerID = data.CustomerID,
+                    CompanyName = data.CompanyName,
+                    ContactName = data.ContactName,
+                    ContactTitle = data.ContactTitle,
+                    Address = data.Address,
+                    City = data.City,
+                    Region = data.Region,
+                    PostalCode = data.PostalCode,
+                    Country = data.Country,
+                    Phone = data.Phone,
+                    Fax = data.Fax
+                }
+                );
+            }
+        }
+
+        internal void deleteCustomer(string customerID) 
+        {
+            using (var connection = new SqlConnection(_connectionString)) 
+            {
+                string sqlQuery = "DELETE FROM Customers WHERE CustomerID = @CustomerID";
+                connection.Execute(sqlQuery, new
+                {
+                    CustomerID = customerID
+                }
+                );
+            }    
         }
     }
 }

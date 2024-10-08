@@ -36,5 +36,21 @@ namespace prjNorthwindCustomer.Helper
             _customersDAO.deleteCustomer(customerID); 
         }
 
+        public void updateCustomer(string customerID,Customers input)
+        {
+            if (input == null) 
+            {
+            throw new ArgumentNullException("請輸入修改資料", nameof(input));
+            }
+            if (string.IsNullOrWhiteSpace(input.ContactName) || string.IsNullOrWhiteSpace(input.ContactTitle) ||
+                string.IsNullOrWhiteSpace(input.Address) || string.IsNullOrWhiteSpace(input.City) || string.IsNullOrWhiteSpace(input.Region) ||
+                string.IsNullOrWhiteSpace(input.PostalCode) || string.IsNullOrWhiteSpace(input.Country) || string.IsNullOrWhiteSpace(input.Phone) ||
+                string.IsNullOrWhiteSpace(input.Fax)) 
+            {
+            throw new ArgumentException("除了公司名稱之外至少一個選項必須填寫");
+            }
+            _customersDAO.updateCustomer(input);
+        }
+
     }
 }

@@ -22,7 +22,7 @@ namespace prjNorthwindCustomer.Controllers
         }
 
         [HttpDelete("{customerID}")]
-        public IActionResult DeleteCustomer(string customerID) 
+        public IActionResult deleteCustomer(string customerID) 
         {
             try
             {
@@ -37,6 +37,13 @@ namespace prjNorthwindCustomer.Controllers
             {
                 return NotFound(iOE.Message); 
             }
+        }
+
+        [HttpPost("{customerID}")]
+        public IActionResult updateCustomer(string customerID, [FromBody] Customers input) 
+        {
+             _customersHelper.updateCustomer(customerID,input);
+            return Ok("已成功修改");
         }
     }
 }

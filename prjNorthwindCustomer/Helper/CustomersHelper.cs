@@ -58,6 +58,14 @@ namespace prjNorthwindCustomer.Helper
             {
                 throw new InvalidOperationException("顧客編號與其他人重複，請重新輸入新顧客編號");
             }
+            if (string.IsNullOrWhiteSpace(input.CustomerID) && string.IsNullOrWhiteSpace(input.CompanyName))
+            {
+                throw new ArgumentException("請輸入顧客編號及公司名稱", nameof(input));
+            }
+            if (input.CustomerID.Length > 5)
+            {
+                throw new ArgumentException("顧客編號最多只能輸入5個字元", nameof(input.CustomerID));
+            }
             _customersDAO.createNewCustomer(input);
         }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using prjNorthwindCustomer.Models;
 using prjNorthwindCustomer.Interface;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace prjNorthwindCustomer.Controllers
 {
@@ -49,8 +50,19 @@ namespace prjNorthwindCustomer.Controllers
         [HttpPost("Create")]
         public IActionResult createNewCustomer([FromBody] Customers input) 
         {
-            _customersHelper.createNewCustomer(input);
-            return Ok("顧客新增完成");
+            try
+            {
+                _customersHelper.createNewCustomer(input);
+                return Ok("已成功新增顧客");
+            }
+            catch (InvalidOperationException iOE)
+            {
+                return Conflict(iOE.Message); 
+            }
+            catch (ArgumentException aE)
+            {
+                return BadRequest(aE.Message); 
+            }
         }
     }
 }

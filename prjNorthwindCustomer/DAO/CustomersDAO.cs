@@ -1,9 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using prjNorthwindCustomer.Models;
-using System;
-using static System.Collections.Specialized.BitVector32;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace prjNorthwindCustomer.DAO
 {
@@ -113,13 +111,13 @@ namespace prjNorthwindCustomer.DAO
             {
                 string sqlQuery = "SELECT COUNT(*) FROM Customers WHERE CustomerID = @CustomerID";
                 var count = connection.ExecuteScalar<int>(sqlQuery, new { CustomerID = customerID });
-                if (count < 1)
+                if (count > 0)
                 {
-                    return false;
+                    return true;
                 }
                 else
                 {
-                    return true;
+                    return false;
                 }
             }
         }

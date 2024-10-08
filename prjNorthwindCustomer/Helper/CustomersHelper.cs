@@ -13,6 +13,13 @@ namespace prjNorthwindCustomer.Helper
             _customersDAO = customersDAO;
         }
 
+        private string _connectionString { get; set; }
+
+        internal CustomersHelper(string connection)
+        {
+            _connectionString = connection;
+        }
+
         public IEnumerable<Customers> selectCustomersInfo(Customers input = null) 
         {
             if (input == null) 
@@ -54,6 +61,8 @@ namespace prjNorthwindCustomer.Helper
 
         public void createNewCustomer(Customers input) 
         {
+            OrdersDAO oDAO = new OrdersDAO(_connectionString);
+
             if (_customersDAO.hasCustomer(input.CustomerID))
             {
                 throw new InvalidOperationException("顧客編號與其他人重複，請重新輸入新顧客編號");
@@ -65,6 +74,10 @@ namespace prjNorthwindCustomer.Helper
             if (input.CustomerID.Length > 5)
             {
                 throw new ArgumentException("顧客編號最多只能輸入5個字元", nameof(input.CustomerID));
+            }
+            if (oDAO.hasOrder(input.CustomerID)) 
+            {
+                throw new InvalidOperationException("該顧客有其他訂單紀錄，請先刪除訂單紀錄後才能刪除顧客。");
             }
             _customersDAO.createNewCustomer(input);
         }

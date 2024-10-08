@@ -21,5 +21,20 @@ namespace prjNorthwindCustomer.Helper
             }
             return _customersDAO.getCustomersInfo(input);
         }
+
+        public void deleteCustomer(string customerID) 
+        {
+            if (string.IsNullOrWhiteSpace(customerID))
+            {
+                throw new ArgumentException("顧客編號不得為空", nameof(customerID));
+            }
+
+            if (!_customersDAO.hasCustomer(customerID))
+            {
+                throw new InvalidOperationException("查無此顧客");
+            }
+            _customersDAO.deleteCustomer(customerID); 
+        }
+
     }
 }

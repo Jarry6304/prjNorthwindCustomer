@@ -106,6 +106,23 @@ namespace prjNorthwindCustomer.DAO
                 return result;
             }
         }
+
+        internal bool hasCustomer(string customerID) 
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                string sqlQuery = "SELECT COUNT(*) FROM Customers WHERE CustomerID = @CustomerID";
+                var count = connection.ExecuteScalar<int>(sqlQuery, new { CustomerID = customerID });
+                if (count < 1)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
     }
 }
 

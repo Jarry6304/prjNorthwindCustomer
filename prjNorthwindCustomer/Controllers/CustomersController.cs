@@ -20,5 +20,23 @@ namespace prjNorthwindCustomer.Controllers
             var cInfo = _customersHelper.selectCustomersInfo(searchCriteria);
             return Ok(cInfo); 
         }
+
+        [HttpDelete("{customerID}")]
+        public IActionResult DeleteCustomer(string customerID) 
+        {
+            try
+            {
+                _customersHelper.deleteCustomer(customerID);
+                return NoContent(); 
+            }
+            catch (ArgumentException aE)
+            {
+                return BadRequest(aE.Message); 
+            }
+            catch (InvalidOperationException iOE)
+            {
+                return NotFound(iOE.Message); 
+            }
+        }
     }
 }

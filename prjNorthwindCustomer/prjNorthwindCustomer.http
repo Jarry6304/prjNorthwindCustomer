@@ -1,0 +1,6 @@
+@prjNorthwindCustomer_HostAddress = http://localhost:5294
+
+GET {{prjNorthwindCustomer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

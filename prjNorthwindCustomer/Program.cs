@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.OpenApi.Models;
 using prjNorthwindCustomer.DAO;
 using prjNorthwindCustomer.Helper;
+using prjNorthwindCustomer.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,13 +13,21 @@ var connectionString = builder.Configuration.GetConnectionString("Northwind");
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Northwind API",
+        Version = "v1",
+        Description = "API for managing Northwind customers"
+    });
+});
 
 // 註冊 CustomersDAO 服務
 builder.Services.AddScoped<CustomersDAO>(provider => new CustomersDAO(connectionString));
 
 // 註冊 CustomersHelper 服務
-builder.Services.AddScoped<CustomersHelper>();
+builder.Services.AddScoped<ICustomersHelper, CustomersHelper>();
 
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
    .AddNegotiate();
@@ -34,7 +44,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Northwind API V1");
+        c.RoutePrefix = string.Empty; // 可選：將 Swagger UI 設置為根路徑
+    });
 }
 
 app.UseHttpsRedirection();

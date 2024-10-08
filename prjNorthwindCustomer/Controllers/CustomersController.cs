@@ -1,19 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using prjNorthwindCustomer.Helper;
+using prjNorthwindCustomer.Models;
+using prjNorthwindCustomer.Interface;
 
 namespace prjNorthwindCustomer.Controllers
 {
+    [Route("api/customers")]
     public class CustomersController : Controller
     {
-        private readonly CustomersHelper _customersHelper;
+        private readonly ICustomersHelper _customersHelper; 
 
-        internal CustomersController(CustomersHelper customersHelper) 
+        public CustomersController(ICustomersHelper customersHelper) 
         {
             _customersHelper = customersHelper;
         }
-        public IActionResult Index()
+
+        [HttpGet("info")]
+        public IActionResult getCustomersInfo([FromQuery] Customers searchCriteria)
         {
-            return View();
+            var cInfo = _customersHelper.selectCustomersInfo(searchCriteria);
+            return Ok(cInfo); 
         }
     }
 }

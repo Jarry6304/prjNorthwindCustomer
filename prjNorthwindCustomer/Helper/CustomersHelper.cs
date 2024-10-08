@@ -1,18 +1,19 @@
 ﻿using prjNorthwindCustomer.DAO;
+using prjNorthwindCustomer.Interface;
 using prjNorthwindCustomer.Models;
 
 namespace prjNorthwindCustomer.Helper
 {
-    internal class CustomersHelper
+    internal class CustomersHelper : ICustomersHelper
     {
         private readonly CustomersDAO _customersDAO;
 
-        internal CustomersHelper(CustomersDAO customersDAO)
+        public CustomersHelper(CustomersDAO customersDAO)
         {
             _customersDAO = customersDAO;
         }
 
-        internal IEnumerable<Customers> selectCustomersInfo(Customers input = null) 
+        public IEnumerable<Customers> selectCustomersInfo(Customers input = null) 
         {
             if (input == null) 
             {

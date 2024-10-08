@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using prjNorthwindCustomer.DAO;
+using prjNorthwindCustomer.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("Northwind");
 
 // Add services to the container.
 
@@ -8,6 +12,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// 註冊 CustomersDAO 服務
+builder.Services.AddScoped<CustomersDAO>(provider => new CustomersDAO(connectionString));
+
+// 註冊 CustomersHelper 服務
+builder.Services.AddScoped<CustomersHelper>();
 
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
    .AddNegotiate();

@@ -76,9 +76,9 @@ namespace prjNorthwindCustomer.DAO
             }
         }
 
-        internal void deleteCustomer(string customerID) 
+        internal void deleteCustomer(string customerID)
         {
-            using (var connection = new SqlConnection(_connectionString)) 
+            using (var connection = new SqlConnection(_connectionString))
             {
                 string sqlQuery = "DELETE FROM Customers WHERE CustomerID = @CustomerID";
                 connection.Execute(sqlQuery, new
@@ -86,7 +86,25 @@ namespace prjNorthwindCustomer.DAO
                     CustomerID = customerID
                 }
                 );
-            }    
+            }
+        }
+
+        internal IEnumerable<Customers> getCustomersInfo(Customers data)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                string sqlQuery = @"
+                    SELECT * FROM Customers 
+                    WHERE (@CustomerID IS NULL OR CustomerID = @CustomerID)
+                    AND (@CompanyName IS NULL OR CompanyName LIKE '%' + @CompanyName + '%')";
+                var result = connection.Query<Customers>(sqlQuery, new
+                {
+                    CustomerID = string.IsNullOrEmpty(data.CustomerID)?(string)null : data.CustomerID,
+                    CompanyName = string.IsNullOrEmpty(data.CompanyName) ? (string)null : data.CompanyName
+                }
+                );
+                return result;
+            }
         }
     }
 }
